@@ -12,7 +12,7 @@ struct arpPacket{
 };
 
 
-void writePacketstoFile() {
+vector<arpPacket> writePacketstoFile() {
   vector<arpPacket> packets;
   ifstream myFile;
   string fileName = "arp.txt";
@@ -31,8 +31,22 @@ void writePacketstoFile() {
   }
 
   myFile.close();
+
+  return packets;
+}
+
+bool isSpoofing (vector<arpPacket> packets,string userIP,string userMAC) {
+
+  while (packets) {
+    if packets.back().sIp == userIP && packets.back().Mac != userMac {
+      true;
+    }
+    packets.pop_back()
+  }
+  return false;
 }
 
 int main() {
-  writePacketstoFile();
+  vector<arpPacket> packets;
+  packets = writePacketstoFile();
 }
