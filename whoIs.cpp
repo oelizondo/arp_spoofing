@@ -15,9 +15,9 @@ struct arpPacket{
 vector<arpPacket> writePacketstoFile() {
   vector<arpPacket> packets;
   ifstream myFile;
-  string fileName = "arp.txt";
 
-  myFile.open(fileName);
+
+  myFile.open("arp.txt");
   string sOption;
   string sMac;
   string sIp;
@@ -31,17 +31,20 @@ vector<arpPacket> writePacketstoFile() {
   }
 
   myFile.close();
-  
+
   return packets;
 }
 
 bool isSpoofing (vector<arpPacket> packets,string userIP,string userMAC) {
 
-  while (packets) {
-    if packets.back().sIp == userIP && packets.back().Mac != userMac {
-      true;
+  while (!packets.empty()) {
+    if (packets.back().sIp == userIP && packets.back().sMac != userMAC) {
+
+      //Regresa la MAC del atacante//
+      cout<<packets.back().sMac;
+      return true;
     }
-    packets.pop_back()
+    packets.pop_back();
   }
   return false;
 }
@@ -49,6 +52,6 @@ bool isSpoofing (vector<arpPacket> packets,string userIP,string userMAC) {
 int main() {
   vector<arpPacket> packets;
   packets = writePacketstoFile();
+
+  isSpoofing(packets,"10.189.15.142","e1:c1:81:01:f1:c1");
 }
-
-
