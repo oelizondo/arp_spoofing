@@ -9,7 +9,7 @@ struct arpPacket{
   string sMac;
   string sIp;
 
-  arpPacket(string op, string mac, string ip) : option(op), sMac(mac), sIp(ip){}
+  // arpPacket(string op, string mac, string ip) : option(op), sMac(mac), sIp(ip){}
 
 };
 
@@ -22,8 +22,10 @@ void readFile(ifstream myFile, string fileName, vector<arpPacket> v){
   string sIp;
 
   while (myFile >> sOption >> sMac >> sIp) {
-
-    arpPacket aux(sOption, sMac, sIp);
+    arpPacket aux;
+    aux.option = sOption;
+    aux.sMac = sMac;
+    aux.sIp = sIp;
     v.push_back(aux);
   }
 
@@ -41,7 +43,4 @@ int main() {
 
   //cout << packets[1].option << endl;
   //cout << packets[2].option << endl;
-
-
-
 }
