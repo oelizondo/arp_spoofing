@@ -8,39 +8,30 @@ struct arpPacket{
   string option;
   string sMac;
   string sIp;
-
-  // arpPacket(string op, string mac, string ip) : option(op), sMac(mac), sIp(ip){}
-
 };
 
 
-void readFile(ifstream myFile, string fileName, vector<arpPacket> v){
+void writePacketstoFile() {
+  vector<arpPacket> packets;
+  ifstream myFile;
+  string fileName = "arp.txt";
 
   myFile.open(fileName);
   string sOption;
   string sMac;
   string sIp;
+  arpPacket aux;
 
   while (myFile >> sOption >> sMac >> sIp) {
-    arpPacket aux;
     aux.option = sOption;
     aux.sMac = sMac;
     aux.sIp = sIp;
-    v.push_back(aux);
+    packets.push_back(aux);
   }
 
   myFile.close();
 }
 
 int main() {
-
-
-  ifstream myFile;
-  string fileName = "arp.txt";
-  vector<arpPacket> packets;
-
-  readFile(myFile, fileName, packets);
-
-  //cout << packets[1].option << endl;
-  //cout << packets[2].option << endl;
+  writePacketstoFile();
 }
