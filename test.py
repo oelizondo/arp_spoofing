@@ -5,12 +5,12 @@ file = open("arp.txt", "w")
 
 def arp_traffic(packet):
     if packet[ARP].op == 1: #who-has (request)
-        file.write("Request: " + packet[ARP].psrc + " is asking about " + packet[ARP].pdst + '\n')
+        file.write("1 " + packet[ARP].psrc + " " + packet[ARP].pdst + '\n')
         return "Request: " + packet[ARP].psrc + " is asking about " + packet[ARP].pdst
 
 
     if packet[ARP].op == 2: #is-at (response)
-        file.write("*Response: " + packet[ARP].hwsrc + " has address " + packet[ARP].psrc + '\n')
+        file.write("2 " + packet[ARP].hwsrc + " " + packet[ARP].psrc + '\n')
         return "*Response: " + packet[ARP].hwsrc + " has address " + packet[ARP].psrc
 
 
