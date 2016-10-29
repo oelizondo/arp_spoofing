@@ -12,7 +12,7 @@ struct arpPacket{
 };
 
 
-void writePacketstoFile() {
+vector<arpPacket> writePacketstoFile() {
   vector<arpPacket> packets;
   ifstream myFile;
   string fileName = "arp.txt";
@@ -31,8 +31,15 @@ void writePacketstoFile() {
   }
 
   myFile.close();
+  
+  return packets;
 }
 
 int main() {
-  writePacketstoFile();
+  vector<arpPacket> packets;
+  packets = writePacketstoFile();
+  
+  
 }
+
+
