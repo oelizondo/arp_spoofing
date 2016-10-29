@@ -4,13 +4,13 @@
 
 using namespace std;
 
+
 struct arpPacket{
   string option;
   string sMac;
   string sIp;
 
   arpPacket(string op, string mac, string ip) : option(op), sMac(mac), sIp(ip){}
-
 };
 
 
@@ -25,6 +25,7 @@ void readFile(ifstream myFile, string fileName, vector<arpPacket> v){
 
     arpPacket aux(sOption, sMac, sIp);
     v.push_back(aux);
+
   }
 
   myFile.close();
