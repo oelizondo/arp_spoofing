@@ -7,37 +7,38 @@
 using namespace std;
 
 struct arpPacket{
-  string option;
+  string option; // replay (2) or request (1)
   string sMac;
   string sIp;
 };
 
-const int THRESHOLD = 5;
+const int THRESHOLD = 5; //enough number of arp replays to consider an attack
 map<string, int> macMapper;
 map<string, int> ipMapper;
 
-arpPacket atacante;
-arpPacket victima;
-
-
+arpPacket atacante; // holds answers of attacker
+arpPacket victima; //holds answers of victim
 
 string findMacOfSpoofer() {
-    string macOfSpoofer = "no spoofing";
     map<string, int>::iterator it = macMapper.begin();
     for (it = macMapper.begin(); it != macMapper.end(); it++) {
         if (it->second > THRESHOLD) {
             //cout << "Mac of spoofer: " << it->first << endl;
-              return it->first;
+              return it->first; //returns mac of spoofer
         }
     }
-    return macOfSpoofer;
+    return "no spoofing"; //in case of a NO spoof, should not happen
 }
 
 
+/*
+ * Finds IP's from attacker and victim
+ * Saves them in corresponding packets
+*/
 void findIPs(string sMacOfSpoofer, vector<arpPacket> packets) {
   map<string, int>::iterator it = ipMapper.begin();
   int iCont = 0;
-  string matiPs[2][2];
+  string matiPs[2][2]; //array of IP's with the respective count
 
   //meter al mapa
   for(int i = 0; i < packets.size(); i++){
@@ -54,6 +55,7 @@ void findIPs(string sMacOfSpoofer, vector<arpPacket> packets) {
 
   }
 
+  //Assigns corresponding IP to attacker and victim
   if(matiPs[0][1] > matiPs[1][1] ){
       //cout << "IP of victim " << matiPs[0][0] << endl;
       victima.sIp = matiPs[0][0];
@@ -73,6 +75,7 @@ void insertIntoMap(string mac) {
   macMapper[mac] = 0;
 }
 
+//keeps delta of replays and requests
 int optionDirfference(vector<arpPacket> packets) {
   int option = 0;
 
@@ -128,11 +131,14 @@ void printAnswer(arpPacket victima, arpPacket atacante){
 int main() {
   vector<arpPacket> packets;
   packets = writePacketstoFile();
-  isSpoofing(packets);
 
-  atacante.sMac = findMacOfSpoofer();
-  findIPs(atacante.sMac, packets);
+  if(isSpoofing(packets)){
+      atacante.sMac = findMacOfSpoofer();
+      findIPs(atacante.sMac, packets);
+      printAnswer(victima, atacante);
+  } else{
+      cout << "Do not worry, be happy" << endl;
+  }
 
-  printAnswer(victima, atacante);
 
 }
