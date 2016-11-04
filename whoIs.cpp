@@ -12,18 +12,37 @@ struct arpPacket{
   string sIp;
 };
 
-const int THRESHOLD = 10;
+const int THRESHOLD = 5;
+map<string, int> arpMapper;
+void findSpoofer() {
+  map<string, int>::iterator it = arpMapper.begin();
+
+  for (it = arpMapper.begin(); it != arpMapper.end(); it++) {
+    if (it->second > THRESHOLD) {
+      cout << "Mac of spoofer: " << it->first << endl;
+    }
+  }
+}
+
+void insertIntoMap(string mac) {
+  arpMapper[mac] = 0;
+}
 
 int optionDirfference(vector<arpPacket> packets) {
-  int option1, option2 = 0;
+  int option = 0;
 
   for (int i = 0; i < packets.size(); i++) {
-    if (packets[i].option == "2")
-      option2++;
-    if(packets[i].option == "1")
-      option1++;
+    if (packets[i].option == "2") {
+      option++;
+      arpMapper[packets[i].sMac]++;
+    }
+    if (packets[i].option == "1") {
+      option--;
+      arpMapper[packets[i].sMac]--;
+    }
   }
-  return option2 - option1;
+
+  return option;
 }
 
 bool isSpoofing (vector<arpPacket> packets) {
@@ -34,7 +53,6 @@ bool isSpoofing (vector<arpPacket> packets) {
 vector<arpPacket> writePacketstoFile() {
   vector<arpPacket> packets;
   ifstream myFile;
-  map<string, string> ARPtable;
 
   myFile.open("arp.txt");
   string sOption;
@@ -46,6 +64,7 @@ vector<arpPacket> writePacketstoFile() {
     aux.option = sOption;
     aux.sMac = sMac;
     aux.sIp = sIp;
+    insertIntoMap(sMac);
     packets.push_back(aux);
   }
 
@@ -57,4 +76,5 @@ int main() {
   vector<arpPacket> packets;
   packets = writePacketstoFile();
   isSpoofing(packets);
+  findSpoofer();
 }
