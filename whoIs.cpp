@@ -30,6 +30,18 @@ string findMacOfSpoofer() {
     return "no spoofing"; //in case of a NO spoof, should not happen
 }
 
+string findMacOfVictim(vector<arpPacket> packets) {
+  for (int i = 0; i < packets.size(); i++) {
+    if(packets[i].sIp == victima.sIp) {
+      if (packets[i].sMac != atacante.sMac) {
+        return packets[i].sMac;
+      }
+    }
+  }
+
+  return "Victim mac not found";
+}
+
 
 /*
  * Finds IP's from attacker and victim
@@ -41,8 +53,8 @@ void findIPs(string sMacOfSpoofer, vector<arpPacket> packets) {
   string matiPs[2][2]; //array of IP's with the respective count
 
   //meter al mapa
-  for(int i = 0; i < packets.size(); i++){
-      if(packets[i].sMac == sMacOfSpoofer){
+  for(int i = 0; i < packets.size(); i++) {
+      if(packets[i].sMac == sMacOfSpoofer) {
           ipMapper[packets[i].sIp]++;
       }
   }
@@ -52,18 +64,16 @@ void findIPs(string sMacOfSpoofer, vector<arpPacket> packets) {
       matiPs[iCont][0] = it->first;
       matiPs[iCont][1] = it->second;
       iCont++;
-
   }
 
   //Assigns corresponding IP to attacker and victim
-  if(matiPs[0][1] > matiPs[1][1] ){
+  if(matiPs[0][1] > matiPs[1][1] ) {
       //cout << "IP of victim " << matiPs[0][0] << endl;
       victima.sIp = matiPs[0][0];
       //cout << "IP of attacker " << matiPs[1][0] << endl;
       atacante.sIp = matiPs[1][0];
-
-
-  } else{
+  }
+  else {
       //cout << "IP of victim " << matiPs[1][0] << endl;
       victima.sIp = matiPs[1][0];
       //cout << "IP of attacker " << matiPs[0][0] << endl;
@@ -132,13 +142,14 @@ int main() {
   vector<arpPacket> packets;
   packets = writePacketstoFile();
 
-  if(isSpoofing(packets)){
+  if(isSpoofing(packets)) {
       atacante.sMac = findMacOfSpoofer();
       findIPs(atacante.sMac, packets);
+      victima.sMac = findMacOfVictim(packets);
       printAnswer(victima, atacante);
-  } else{
+  }
+  else {
       cout << "Do not worry, be happy" << endl;
   }
-
 
 }
