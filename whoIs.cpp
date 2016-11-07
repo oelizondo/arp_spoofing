@@ -19,7 +19,7 @@ map<string, int> ipMapper;
 arpPacket atacante; // holds answers of attacker
 arpPacket victima; //holds answers of victim
 
-string findMacOfSpoofer() {
+string findMacOfSpoofer() { // da fuck
     map<string, int>::iterator it = macMapper.begin();
     for (it = macMapper.begin(); it != macMapper.end(); it++) {
         if (it->second > THRESHOLD) {
@@ -87,6 +87,7 @@ void insertIntoMap(string mac) {
 
 //keeps delta of replays and requests
 int optionDirfference(vector<arpPacket> packets) {
+  //no asegura que alguien este haciendo poisioning
   int option = 0;
 
   for (int i = 0; i < packets.size(); i++) {
@@ -131,11 +132,10 @@ vector<arpPacket> writePacketstoFile() {
 }
 
 void printAnswer(arpPacket victima, arpPacket atacante){
-
-    cout << "  Mac of victim:  " << victima.sMac << endl;
+    cout << "Mac of victim:  " << victima.sMac << endl;
     cout << "Mac of attacker:  " << atacante.sMac << endl;
-    cout << "   IP of victim:  " << victima.sIp << endl;
-    cout << " IP of attacker:  " << atacante.sIp << endl;
+    cout << "IP of victim:  " << victima.sIp << endl;
+    cout << "IP of attacker:  " << atacante.sIp << endl;
 }
 
 int main() {
