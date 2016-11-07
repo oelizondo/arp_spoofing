@@ -9,6 +9,7 @@ try:
 except:
     arg = ""
 
+print(arg)
 
 def arp_traffic(packet):
     if packet[ARP].op == 1: #who-has (request)
