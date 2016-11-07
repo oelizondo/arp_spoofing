@@ -1,6 +1,6 @@
 ## Import Scapy module
 from scapy.all import *
-
+import os
 
 ip = input("Type the IP address of the victim: -> ")
 print("You are looking for the mac of this IP " + ip);
@@ -14,5 +14,5 @@ packet.pdst = ip # IP DE LA VICTIMA
 packet.dst = "ff:ff:ff:ff:ff:ff" # all victims
 
 #packet.show()
-
+os.system('python test.py &')
 sendp(packet, loop =1, inter = .2, count = 1)
