@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <stdlib.h>
 
 using namespace std;
 
@@ -15,7 +16,6 @@ struct arpPacket{
 const int THRESHOLD = 5; //enough number of arp replays to consider an attack
 map<string, int> macMapper;
 map<string, int> ipMapper;
-
 arpPacket atacante; // holds answers of attacker
 arpPacket victima; //holds answers of victim
 
@@ -38,7 +38,6 @@ string findMacOfVictim(vector<arpPacket> packets) {
       }
     }
   }
-
   return "Victim mac not found";
 }
 
@@ -117,14 +116,22 @@ vector<arpPacket> writePacketstoFile() {
   string sOption;
   string sMac;
   string sIp;
-  arpPacket aux;
+  arpPacket op2Packet;
+  arpPacket op1Packet;
 
   while (myFile >> sOption >> sMac >> sIp) {
-    aux.option = sOption;
-    aux.sMac = sMac;
-    aux.sIp = sIp;
     insertIntoMap(sMac);
-    packets.push_back(aux);
+    if(sOption == "1") {
+      op1Packet.option = sOption;
+      op1Packet.sIp = sIp;
+      packets.push_back(op1Packet);
+    }
+    else {
+      op2Packet.option = sOption;
+      op2Packet.sMac = sMac;
+      op2Packet.sIp = sIp;
+      packets.push_back(op2Packet);
+    }
   }
 
   myFile.close();
@@ -132,10 +139,12 @@ vector<arpPacket> writePacketstoFile() {
 }
 
 void printAnswer(arpPacket victima, arpPacket atacante){
-    cout << "Mac of victim:  " << victima.sMac << endl;
+    cout << "Mac of victim:    " << victima.sMac << endl;
     cout << "Mac of attacker:  " << atacante.sMac << endl;
-    cout << "IP of victim:  " << victima.sIp << endl;
-    cout << "IP of attacker:  " << atacante.sIp << endl;
+    cout << "IP of victim:     " << victima.sIp << endl;
+    cout << "IP of attacker:   " << atacante.sIp << endl;
+    string victimCommand = "python macOfVictim.py " + victima.sIp;
+    system(victimCommand.c_str());
 }
 
 int main() {

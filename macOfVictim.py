@@ -1,11 +1,8 @@
 ## Import Scapy module
 from scapy.all import *
-import os
+from os import sys
 
-ip = input("Type the IP address of the victim: -> ")
-print("You are looking for the mac of this IP " + ip);
-
-
+ip = sys.argv[1]
 packet = Ether()/ARP()
 packet.op = 1 #request
 packet.psrc="10.15.90.211" #IP DEL HOST
@@ -14,5 +11,5 @@ packet.pdst = ip # IP DE LA VICTIMA
 packet.dst = "ff:ff:ff:ff:ff:ff" # all victims
 
 #packet.show()
-os.system('python test.py &')
+os.system('python test.py' + ip + '&')
 sendp(packet, loop =1, inter = .2, count = 1)
