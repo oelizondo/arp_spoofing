@@ -8,15 +8,11 @@ print("You are looking for the mac of this IP " + ip);
 
 packet = Ether()/ARP()
 packet.op = 1 #request
-packet.psrc="10.189.15.142" #IP DEL HOST
-
+packet.psrc="10.15.90.211" #IP DEL HOST
 packet.hwdst="ff:ff:ff:ff:ff:ff" # all victims
-
 packet.pdst = ip # IP DE LA VICTIMA
-
-#packet.pdst = "10.189.15.120" # IP DE LA VICTIMA
 packet.dst = "ff:ff:ff:ff:ff:ff" # all victims
 
-packet.show()
+#packet.show()
 
-sendp(packet, loop =1, inter = .2, count = 3)
+sendp(packet, loop =1, inter = .2, count = 1)
