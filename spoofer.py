@@ -53,4 +53,10 @@ def arp_traffic(packet):
             arp_request_packet = buildPacket(packet[ARP].psrc)
             sendp(arp_request_packet, loop =1, inter = .2, count = 1)
 
+        else:
+            print("Don't worry, be happy")
+
+
+
+
 print sniff(prn=arp_traffic, filter="arp", store=0, count=200)
