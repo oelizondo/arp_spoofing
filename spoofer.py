@@ -2,8 +2,11 @@ from scapy.all import *
 
 THRESHOLD = 8
 packets = {}
+
 victim_ip = None
 mac_victim = None
+attacker_mac = None
+
 flag = False
 format_answer = "\n"
 
@@ -16,7 +19,7 @@ def wait_for_answer(packet):
 def buildPacket(ip):
     mypacket = Ether()/ARP()
     mypacket.op = 1 #request
-    mypacket.psrc="10.15.245.227" #IP DEL HOST
+    mypacket.psrc="192.168.0.165" #IP DEL HOST
     mypacket.hwdst="ff:ff:ff:ff:ff:ff" # all victims
     mypacket.pdst = ip # IP DE LA VICTIMA
     mypacket.dst = "ff:ff:ff:ff:ff:ff" # all victims
@@ -33,7 +36,7 @@ def arp_traffic(packet):
         key = packet[ARP].hwsrc +  packet[ARP].psrc
         check_for_and_add(packets, key)
 
-        if flag and packet[ARP].psrc == victim_ip:
+        if flag and packet[ARP].psrc == victim_ip and packet[ARP].hwsrc != attacker_mac:
             wait_for_answer(packet[ARP])
 
         if packets[key] >= THRESHOLD:
@@ -43,8 +46,9 @@ def arp_traffic(packet):
             format_answer += ("Attacker\'s MAC: " + packet[ARP].hwsrc + '\n' + "Victim\'s IP: " + packet[ARP].psrc + '\n')
             #print("Attacker\'s MAC: " + packet[ARP].hwsrc)
             #print("Victim\'s IP: " + packet[ARP].psrc)
-            mac_victim = packet[ARP].hwsrc
             global victim_ip
+            global attacker_mac
+            attacker_mac = packet[ARP].hwsrc
             victim_ip = packet[ARP].psrc
             arp_request_packet = buildPacket(packet[ARP].psrc)
             sendp(arp_request_packet, loop =1, inter = .2, count = 1)
