@@ -16,7 +16,7 @@ def wait_for_answer(packet):
 def buildPacket(ip):
     mypacket = Ether()/ARP()
     mypacket.op = 1 #request
-    mypacket.psrc="10.12.161.195" #IP DEL HOST
+    mypacket.psrc="10.15.245.227" #IP DEL HOST
     mypacket.hwdst="ff:ff:ff:ff:ff:ff" # all victims
     mypacket.pdst = ip # IP DE LA VICTIMA
     mypacket.dst = "ff:ff:ff:ff:ff:ff" # all victims
